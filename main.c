@@ -3,23 +3,37 @@
 
 int main()
 {
-    float temperature;
-    printf("Please enter the temperature in degree celsius: ");
-    scanf("%f", &temperature);
+    int xPos = 0;
+    int yPos = 0;
 
-    printf("The temperature is %.1f degree celsius\n", temperature);
+    printf("x: %d, y: %d\n", xPos, yPos);
 
-    if(temperature < 15) {
-        printf("It is cold :(\n");
-    } else {
-        printf("It is warm :)\n");
+    char direction;
+    scanf("%c", &direction);
+
+    switch(direction) {
+        case 'W':
+        case 'w':
+            yPos++;
+            break;
+        case 'A':
+        case 'a':
+            xPos--;
+            break;
+        case 'S':
+        case 's':
+            yPos--;
+            break;
+        case 'D':
+        case 'd':
+            xPos++;
+            break;
+        default:
+            printf("Oh no! You entered something stupid!\n");
+            break;
     }
 
-    /*
-    int i = 123;
-    int j = 234;
+    printf("x: %d, y: %d\n", xPos, yPos);
 
-    printf("%d\n%d\n%d\n", &i, &j, );
-    */
     return 0;
 }
