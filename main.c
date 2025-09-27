@@ -1,61 +1,59 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_NAME_LENGTH 32
-#define MAX_NAME_ARRAY_LENGTH (MAX_NAME_LENGTH + 1)
+void A();
+void B();
+int spellString(char string[], int stringLength);
+
+void increment(int* x) {
+    (*x)++;
+}
 
 int main()
 {
-    char name[MAX_NAME_ARRAY_LENGTH];
-    scanf("%32s", &name);
+    int i = 123;
 
-    for(int i = 0; name[i] != '\0' && i < MAX_NAME_ARRAY_LENGTH; i++) {
-        printf("%c", name[i]);
-    }
+    increment(&i);
 
-    int xPos = 0;
-    int yPos = 0;
+    printf("%d\n", i);
 
-    int isRunning = 1;
+    char name[17];
+    scanf("%16s", &name);
 
-    while(isRunning) {
-        printf("x: %d, y: %d\n", xPos, yPos);
-
-        int isInvalidInput;
-        do {
-            char direction;
-            scanf(" %c", &direction);
-
-            isInvalidInput = 0;
-
-            switch(direction) {
-                case 'W':
-                case 'w':
-                    yPos++;
-                    break;
-                case 'A':
-                case 'a':
-                    xPos--;
-                    break;
-                case 'S':
-                case 's':
-                    yPos--;
-                    break;
-                case 'D':
-                case 'd':
-                    xPos++;
-                    break;
-                case 'X':
-                case 'x':
-                    isRunning = 0;
-                    break;
-                default:
-                    printf("Oh no! You entered something stupid!\n");
-                    isInvalidInput = 1;
-                    break;
-            }
-        } while(isInvalidInput);
-    }
+    int numberOfPrintedCharacters = spellString(name, 17);
+    printf("%d\n", numberOfPrintedCharacters);
 
     return 0;
+}
+
+void A() {
+    printf("A\n");
+}
+
+void B() {
+    printf("B\n");
+}
+
+/*
+void spellString(char string[], int stringLength){
+    for(int currentIndex = 0; currentIndex < stringLength; currentIndex++) {
+        if(string[currentIndex] == '\0') {
+            return;
+        }
+
+        printf("%c\n", string[currentIndex]);
+    }
+}
+*/
+
+int spellString(char string[], int stringLength){
+    for(int currentIndex = 0; currentIndex < stringLength; currentIndex++) {
+        if(string[currentIndex] == '\0') {
+            return currentIndex;
+        }
+
+        printf("%c\n", string[currentIndex]);
+    }
+
+    return stringLength;
 }
