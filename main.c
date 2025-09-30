@@ -1,59 +1,63 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void A();
-void B();
-int spellString(char string[], int stringLength);
+int times = 5;
 
-void increment(int* x) {
-    (*x)++;
+void printTimes(char text[]) {
+    for(int i = 0; i < times; i++) {
+        printf("%s\n", text);
+    }
 }
 
-int main()
-{
-    int i = 123;
+void incrementTimes() {
+    times++;
+}
 
-    increment(&i);
+int isValidYear(int year) {
+    /*if(year >= 1900 && year <= 2100) {
+        return 1;
+    }
 
-    printf("%d\n", i);
+    return 0;*/
 
-    char name[17];
-    scanf("%16s", &name);
+    return year >= 1900 && year <= 2100;
+}
 
-    int numberOfPrintedCharacters = spellString(name, 17);
-    printf("%d\n", numberOfPrintedCharacters);
+int isValidMonth(int month) {
+    return month >= 1 && month <= 12;
+}
+
+int isLeapYear(int year) {
+    return 1;
+}
+
+int isValidDay(int day, int month, int year) {
+    if(day <= 0) {
+        return 0;
+    }
+
+    return 1;
+}
+
+int isValidDate(int day, int month, int year) {
+    return isValidYear(year) && isValidMonth(month) && isValidDay(day, month, year);
+}
+
+int main() {
+    printf("Is Valid? %d\n", isValidYear(1899));
+
+    //double percentage = 12.32;
+    //printf("Value: %d %d\n", something(percentage), somethingElse());
+
+    int day = 30;
+    int month = 9;
+    int year = 2025;
+
+    if(isValidDate(day, month, year)) {
+        printf("Valid Date");
+    } else {
+        printf("Invalid Date");
+    }
 
     return 0;
-}
-
-void A() {
-    printf("A\n");
-}
-
-void B() {
-    printf("B\n");
-}
-
-/*
-void spellString(char string[], int stringLength){
-    for(int currentIndex = 0; currentIndex < stringLength; currentIndex++) {
-        if(string[currentIndex] == '\0') {
-            return;
-        }
-
-        printf("%c\n", string[currentIndex]);
-    }
-}
-*/
-
-int spellString(char string[], int stringLength){
-    for(int currentIndex = 0; currentIndex < stringLength; currentIndex++) {
-        if(string[currentIndex] == '\0') {
-            return currentIndex;
-        }
-
-        printf("%c\n", string[currentIndex]);
-    }
-
-    return stringLength;
 }
