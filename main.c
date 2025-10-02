@@ -1,54 +1,68 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void increment(int* value);
-int isValidDate(int day, int month, int year);
-int isValidYear(int year);
-int isValidMonth(int month);
-int isValidDay(int day);
-
-int main() {
-    int i = 123;
-    int day = 30;
-    int month = 9;
-    int year = 2025;
-
-    if(isValidDate(day, month, year)) {
-        printf("TRUE\n");
-    } else {
-        printf("FALSE\n");
-    }
-
-    increment(&i);
-    printf("%d\n", i);
-}
-
-void increment(int* value) {
-    *value += 1;
-}
-
-int isValidDate(int day, int month, int year) {
-    printf("isValidDate\n");
-    return isValidDay(day) && isValidMonth(month) && isValidYear(year);
-}
-
-int isValidYear(int year) {
-    printf("isValidYear\n");
-    return year >= 1900 && year <= 2100;
-}
-
-int isValidMonth(int month) {
-    /*if(month >= 1 && month <= 12) {
+int power(int x, int y) {
+    if(y == 0) {
         return 1;
     }
 
-    return 0;*/
-
-    printf("isValidMonth\n");
-    return month >= 1 && month <= 12;
+    return x * power(x, y - 1);
 }
 
-int isValidDay(int day) {
-    printf("isValidDay\n");
-    return 1;
+/*
+void printFileStructure(char path[]) {
+    if(!isDirectory(path)) {
+        printf("Path: %s", path);
+        return;
+    }
+
+    // Get all Files and Directories
+    // subPaths = getDirectoryStructure(path);
+
+    // go over each element
+    printFileStructure(currentSubPath);
+}
+*/
+
+void printTree(int currentDepth, int maxDepth) {
+    if(currentDepth >= maxDepth) {
+        return;
+    }
+
+    for(int i = 0; i < currentDepth; i++) {
+        printf(" ");
+    }
+
+    printf("Depth: %d\n", currentDepth);
+
+    printTree(currentDepth + 1, maxDepth);
+    printTree(currentDepth + 1, maxDepth);
+}
+
+int add(int x, int y) {
+    int result = x + y;
+
+    return result;
+}
+
+void increment(int* x) {
+    int derefX = *x;
+    derefX++;
+}
+
+int main() {
+    int x;
+    int y;
+
+    printf("x: ");
+    scanf("%d", &x);
+
+    printf("y: ");
+    scanf("%d", &y);
+
+    increment(&x);
+    printf("%d + %d = %d\n", x, y, add(x, y));
+
+    printTree(0, 4 );
+    return 0;
 }
