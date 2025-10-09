@@ -1,59 +1,71 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void A();
-void B();
-int spellString(char string[], int stringLength);
+void something(int i) {
+    if(i <= 0) {
+        return;
+    }
 
-void increment(int* x) {
-    (*x)++;
+    printf("Hi! %d\n", i);
+
+    i--;
+    something(i);
 }
 
-int main()
-{
-    int i = 123;
+int power(int x, int y) {
+    int result = 1;
 
-    increment(&i);
+    for(int i = 0; i < y; i++) {
+        result *= x;
+    }
 
-    printf("%d\n", i);
-
-    char name[17];
-    scanf("%16s", &name);
-
-    int numberOfPrintedCharacters = spellString(name, 17);
-    printf("%d\n", numberOfPrintedCharacters);
-
-    return 0;
+    return result;
 }
 
-void A() {
-    printf("A\n");
-}
+int powerRecursive(int x, int y) {
+    if(y == 0) {
+        return 1;
+    }
 
-void B() {
-    printf("B\n");
+    return x * powerRecursive(x, y - 1); // x * x^(y-1)
 }
 
 /*
-void spellString(char string[], int stringLength){
-    for(int currentIndex = 0; currentIndex < stringLength; currentIndex++) {
-        if(string[currentIndex] == '\0') {
-            return;
-        }
+void printFileStructure(char path[]) {
+    if(isFile(path)) {
+        printf("File: %s", path);
+        return;
+    }
 
-        printf("%c\n", string[currentIndex]);
+    children = getChildPaths(path);
+
+    for(GO OVER CHILDREN) {
+        printFileStructure(children);
     }
 }
 */
 
-int spellString(char string[], int stringLength){
-    for(int currentIndex = 0; currentIndex < stringLength; currentIndex++) {
-        if(string[currentIndex] == '\0') {
-            return currentIndex;
-        }
-
-        printf("%c\n", string[currentIndex]);
+void printTree(int currentDepth, int maxDepth) {
+    if(currentDepth >= maxDepth) {
+        return;
     }
 
-    return stringLength;
+    for(int i = 0; i < currentDepth; i++) {
+        printf("   ");
+    }
+
+    printf("File in depth: %d\n", currentDepth);
+
+    printTree(currentDepth + 1, maxDepth);
+    printTree(currentDepth + 1, maxDepth);
+    printTree(currentDepth + 1, maxDepth);
+}
+
+int main()
+{
+    printTree(0, 10);
+
+    printf("result: %d\n", power(2, 3));
+    printf("result: %d\n", powerRecursive(2, 3));
+    return 0;
 }
