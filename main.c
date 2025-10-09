@@ -1,68 +1,87 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int power(int x, int y) {
-    if(y == 0) {
-        return 1;
-    }
-
-    return x * power(x, y - 1);
-}
-
-/*
-void printFileStructure(char path[]) {
-    if(!isDirectory(path)) {
-        printf("Path: %s", path);
-        return;
-    }
-
-    // Get all Files and Directories
-    // subPaths = getDirectoryStructure(path);
-
-    // go over each element
-    printFileStructure(currentSubPath);
-}
-*/
-
-void printTree(int currentDepth, int maxDepth) {
-    if(currentDepth >= maxDepth) {
-        return;
-    }
-
-    for(int i = 0; i < currentDepth; i++) {
-        printf(" ");
-    }
-
-    printf("Depth: %d\n", currentDepth);
-
-    printTree(currentDepth + 1, maxDepth);
-    printTree(currentDepth + 1, maxDepth);
-}
-
-int add(int x, int y) {
-    int result = x + y;
-
-    return result;
-}
-
 void increment(int* x) {
-    int derefX = *x;
-    derefX++;
+    (*x)++;
+}
+
+int* createIntegerVariable(int* myInt) {
+    *myInt = 123;
+    return myInt;
+}
+
+int max(int x, int y) {
+    if(x > y) {
+        return x;
+    }
+
+    return y;
+}
+
+int* maxPointer(int* x, int* y) {
+    if(*x > *y) {
+        return x;
+    }
+
+    return y;
+}
+
+void maxDoublePointer(int* x, int* y, int** target) {
+    if(*x > *y) {
+        *target = x;
+    }
+
+    *target = y;
 }
 
 int main() {
-    int x;
-    int y;
+    int y = 124;
+    int x = 123;
 
-    printf("x: ");
-    scanf("%d", &x);
+    int m = max(x, y);
 
-    printf("y: ");
-    scanf("%d", &y);
+    printf("x: %d\n", x);
+    printf("y: %d\n", y);
+    printf("max (m): %d\n", m);
 
-    increment(&x);
-    printf("%d + %d = %d\n", x, y, add(x, y));
+    int* mp = maxPointer(&x, &y);
+    (*mp)++;
 
-    printTree(0, 4 );
+    printf("x: %d\n", x);
+    printf("y: %d\n", y);
+    printf("max (mp): %d\n", *mp);
+
+    int* mpp = &x;
+
+    printf("x: %d\n", x);
+    printf("y: %d\n", y);
+    printf("mpp - original: %d\n", *mpp);
+
+    maxDoublePointer(&x, &y, &mpp);
+
+    printf("x: %d\n", x);
+    printf("y: %d\n", y);
+    printf("mpp: %d\n", *mpp);
+
+    int myInt = 5;
+    int* myOtherInt = createIntegerVariable(&myInt);
+    int* myOtherOtherInt = myOtherInt;
+
+    printf("%d\n", myInt);
+    printf("%d\n", *myOtherInt);
+    printf("%d\n", *myOtherOtherInt);
+
+    printf("%d\n", &myInt);
+    printf("%d\n", myOtherInt);
+    printf("%d\n", myOtherOtherInt);
+
+    printf("%d\n", &myInt);
+    printf("%d\n", &myOtherInt);
+    printf("%d\n", &myOtherOtherInt);
+
+    int** myDoubleOther = &myOtherInt;
+    printf("%d\n", myDoubleOther);
+    printf("%d\n", *myDoubleOther);
+    printf("%d\n", **myDoubleOther);
     return 0;
 }
