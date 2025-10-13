@@ -1,87 +1,70 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void increment(int* x) {
-    (*x)++;
+void printValue(int myInt) {
+    printf("%d\n", myInt);
 }
 
-int* createIntegerVariable(int* myInt) {
-    *myInt = 123;
-    return myInt;
+void printReference(int* myRef) {
+    printf("%d\n", *myRef);
 }
 
-int max(int x, int y) {
-    if(x > y) {
-        return x;
+void printArray(int myArr[], int myArrSize) {
+    for(int i = 0; i < myArrSize; i++) {
+        printf("%d\n", myArr[i]);
     }
-
-    return y;
 }
 
-int* maxPointer(int* x, int* y) {
-    if(*x > *y) {
-        return x;
+void printWorld(int worldSizeX, int worldSizeY, char world[worldSizeX][worldSizeY]) {
+    for(int y = 0; y < worldSizeY; y++) {
+        for(int x = 0; x < worldSizeX; x++) {
+            printf("%c ", world[x][y]);
+        }
+
+        printf("\n");
     }
-
-    return y;
-}
-
-void maxDoublePointer(int* x, int* y, int** target) {
-    if(*x > *y) {
-        *target = x;
-    }
-
-    *target = y;
 }
 
 int main() {
-    int y = 124;
-    int x = 123;
+    int worldSizeX = 5;
+    int worldSizeY = 5;
 
-    int m = max(x, y);
+    char world[worldSizeX][worldSizeY];
 
-    printf("x: %d\n", x);
-    printf("y: %d\n", y);
-    printf("max (m): %d\n", m);
+    for(int y = 0; y < worldSizeY; y++) {
+        for(int x = 0; x < worldSizeX; x++) {
+            world[x][y] = ' ';
+        }
+    }
 
-    int* mp = maxPointer(&x, &y);
-    (*mp)++;
+    world[2][1] = 'x';
+    world[0][1] = '~';
+    world[0][0] = '~';
+    world[0][2] = '~';
+    world[1][1] = '~';
+    world[3][2] = 'w';
+    world[4][2] = 'w';
+    world[4][3] = 'w';
+    world[4][4] = 'w';
 
-    printf("x: %d\n", x);
-    printf("y: %d\n", y);
-    printf("max (mp): %d\n", *mp);
+    printWorld(worldSizeX, worldSizeY, world);
 
-    int* mpp = &x;
+    int myInt = 17;
+    printValue(myInt);
+    printReference(&myInt);
 
-    printf("x: %d\n", x);
-    printf("y: %d\n", y);
-    printf("mpp - original: %d\n", *mpp);
+    int arrayElementCount;
+    printf("Enter the number of elements: ");
+    scanf("%d", &arrayElementCount);
 
-    maxDoublePointer(&x, &y, &mpp);
+    int myIntArray[arrayElementCount];
 
-    printf("x: %d\n", x);
-    printf("y: %d\n", y);
-    printf("mpp: %d\n", *mpp);
+    for(int i = 0; i < arrayElementCount; i++) {
+        printf("Enter the value of element '%d': ", i + 1);
+        scanf("%d", &myIntArray[i]);
+    }
 
-    int myInt = 5;
-    int* myOtherInt = createIntegerVariable(&myInt);
-    int* myOtherOtherInt = myOtherInt;
+    printArray(myIntArray, arrayElementCount);
 
-    printf("%d\n", myInt);
-    printf("%d\n", *myOtherInt);
-    printf("%d\n", *myOtherOtherInt);
-
-    printf("%d\n", &myInt);
-    printf("%d\n", myOtherInt);
-    printf("%d\n", myOtherOtherInt);
-
-    printf("%d\n", &myInt);
-    printf("%d\n", &myOtherInt);
-    printf("%d\n", &myOtherOtherInt);
-
-    int** myDoubleOther = &myOtherInt;
-    printf("%d\n", myDoubleOther);
-    printf("%d\n", *myDoubleOther);
-    printf("%d\n", **myDoubleOther);
     return 0;
 }
