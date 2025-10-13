@@ -1,71 +1,77 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void something(int i) {
-    if(i <= 0) {
-        return;
-    }
-
-    printf("Hi! %d\n", i);
-
-    i--;
-    something(i);
+int* createInteger(int* myInt) {
+    *myInt = 567;
+    return myInt;
 }
 
-int power(int x, int y) {
-    int result = 1;
-
-    for(int i = 0; i < y; i++) {
-        result *= x;
+int max(int x, int y) {
+    if(x > y) {
+        return x;
     }
 
-    return result;
+    return y;
 }
 
-int powerRecursive(int x, int y) {
-    if(y == 0) {
-        return 1;
+int* maxReference(int* x, int* y) {
+    if(*x > *y) {
+        return x;
     }
 
-    return x * powerRecursive(x, y - 1); // x * x^(y-1)
+    return y;
 }
 
-/*
-void printFileStructure(char path[]) {
-    if(isFile(path)) {
-        printf("File: %s", path);
-        return;
+void maxDoubleReference(int* x, int* y, int** target) {
+    if(*x > *y) {
+        *target = x;
     }
 
-    children = getChildPaths(path);
-
-    for(GO OVER CHILDREN) {
-        printFileStructure(children);
-    }
-}
-*/
-
-void printTree(int currentDepth, int maxDepth) {
-    if(currentDepth >= maxDepth) {
-        return;
-    }
-
-    for(int i = 0; i < currentDepth; i++) {
-        printf("   ");
-    }
-
-    printf("File in depth: %d\n", currentDepth);
-
-    printTree(currentDepth + 1, maxDepth);
-    printTree(currentDepth + 1, maxDepth);
-    printTree(currentDepth + 1, maxDepth);
+    *target = y;
 }
 
 int main()
 {
-    printTree(0, 10);
+    int x = 12;
+    int y = 83;
 
-    printf("result: %d\n", power(2, 3));
-    printf("result: %d\n", powerRecursive(2, 3));
+    int maximum = max(x, y);
+    printf("x: %d\n", x);
+    printf("y: %d\n", y);
+    printf("max: %d\n\n", maximum);
+
+    int* maximumReference = maxReference(&x, &y);
+    (*maximumReference)++;
+
+    printf("x: %d\n", x);
+    printf("y: %d\n", y);
+    printf("max: %d\n\n", *maximumReference);
+
+    maxDoubleReference(&x, &y, &maximumReference);
+    (*maximumReference)++;
+
+    printf("x: %d\n", x);
+    printf("y: %d\n", y);
+    printf("max: %d\n", *maximumReference);
+
+    return 0;
+
+    int myInt = 123;
+    int* myOtherInt = createInteger(&myInt);
+    int* myOtherOtherInt = myOtherInt;
+
+    printf("%d\n", myInt);
+    printf("%d\n", myOtherInt);
+    printf("%d\n", myOtherOtherInt);
+
+    printf("Addr. MyInt: %d\n", &myInt);
+    printf("Addr. MyOtherInt: %d\n", &myOtherInt);
+    printf("Addr. MyOtherOtherInt: %d\n", &myOtherOtherInt);
+
+    int** doublePointer = &myOtherInt;
+    printf("Val DoublePointer: %d\n", doublePointer);
+    printf("Deref. DoublePointer: %d\n", *doublePointer);
+    printf("Double Deref. DoublePointer: %d\n", **doublePointer);
+
     return 0;
 }
