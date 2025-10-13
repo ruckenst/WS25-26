@@ -1,77 +1,71 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int* createInteger(int* myInt) {
-    *myInt = 567;
-    return myInt;
+void printValue(int value) {
+    printf("%d\n", value);
 }
 
-int max(int x, int y) {
-    if(x > y) {
-        return x;
-    }
-
-    return y;
+void printReference(int* reference) {
+    printf("%d\n", *reference);
 }
 
-int* maxReference(int* x, int* y) {
-    if(*x > *y) {
-        return x;
+void printArray(int array[], int arrayLength) {
+    for(int i = 0; i < arrayLength; i++) {
+        printf("%d\n", array[i]);
     }
-
-    return y;
 }
 
-void maxDoubleReference(int* x, int* y, int** target) {
-    if(*x > *y) {
-        *target = x;
-    }
+void printWorld(int lengthX, int lengthY, char world[lengthX][lengthY]) {
+    for(int y = 0; y < lengthY; y++) {
+        for(int x = 0; x < lengthX; x++) {
+            printf("%c ", world[x][y]);
+        }
 
-    *target = y;
+        printf("\n");
+    }
 }
 
 int main()
 {
-    int x = 12;
-    int y = 83;
+    char world[5][5];
 
-    int maximum = max(x, y);
-    printf("x: %d\n", x);
-    printf("y: %d\n", y);
-    printf("max: %d\n\n", maximum);
+    for(int y = 0; y < 5; y++) {
+        for(int x = 0; x < 5; x++) {
+            world[x][y] = ' ';
+        }
+    }
 
-    int* maximumReference = maxReference(&x, &y);
-    (*maximumReference)++;
+    world[4][2] = 'x';
+    world[1][4] = 'P';
+    world[0][0] = '~';
+    world[1][0] = '~';
+    world[0][1] = '~';
+    world[3][3] = 'w';
+    world[3][4] = 'w';
+    world[3][2] = 'w';
+    world[4][3] = 'w';
+    world[2][1] = ':';
+    world[2][0] = '.';
 
-    printf("x: %d\n", x);
-    printf("y: %d\n", y);
-    printf("max: %d\n\n", *maximumReference);
-
-    maxDoubleReference(&x, &y, &maximumReference);
-    (*maximumReference)++;
-
-    printf("x: %d\n", x);
-    printf("y: %d\n", y);
-    printf("max: %d\n", *maximumReference);
+    printWorld(5, 5, world);
 
     return 0;
 
     int myInt = 123;
-    int* myOtherInt = createInteger(&myInt);
-    int* myOtherOtherInt = myOtherInt;
+    printValue(myInt);
+    printReference(&myInt);
 
-    printf("%d\n", myInt);
-    printf("%d\n", myOtherInt);
-    printf("%d\n", myOtherOtherInt);
+    int numberOfArrayElements;
+    printf("Enter the number of elements: ");
+    scanf("%d", &numberOfArrayElements);
 
-    printf("Addr. MyInt: %d\n", &myInt);
-    printf("Addr. MyOtherInt: %d\n", &myOtherInt);
-    printf("Addr. MyOtherOtherInt: %d\n", &myOtherOtherInt);
+    int myArr[numberOfArrayElements];
 
-    int** doublePointer = &myOtherInt;
-    printf("Val DoublePointer: %d\n", doublePointer);
-    printf("Deref. DoublePointer: %d\n", *doublePointer);
-    printf("Double Deref. DoublePointer: %d\n", **doublePointer);
+    for(int i = 0; i < numberOfArrayElements; i++) {
+        printf("Enter the value for position '%d': ", i + 1);
+        scanf("%d", &myArr[i]);
+    }
 
+    printArray(myArr, numberOfArrayElements);
     return 0;
 }
