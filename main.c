@@ -1,70 +1,159 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void printValue(int myInt) {
-    printf("%d\n", myInt);
-}
+enum Gender {
+    Female,
+    Male,
+    Diverse
+};
 
-void printReference(int* myRef) {
-    printf("%d\n", *myRef);
-}
+struct Student {
+    char        Name[33]; // 32 + \0
+    enum Gender Gender;
+};
 
-void printArray(int myArr[], int myArrSize) {
-    for(int i = 0; i < myArrSize; i++) {
-        printf("%d\n", myArr[i]);
+
+
+
+
+
+
+
+enum Weekday {
+    Sunday,
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday
+};
+
+enum Month {
+    January,
+    February
+};
+
+void printWeekday(enum Weekday day) {
+    switch(day) {
+    case Monday:
+        printf("Monday\n");
+        break;
+    case Tuesday:
+        printf("Tuesday\n");
+        break;
+    case Wednesday:
+        printf("Wednesday\n");
+        break;
+    case Thursday:
+        printf("Thursday\n");
+        break;
+    case Friday:
+        printf("Friday\n");
+        break;
+    case Saturday:
+        printf("Saturday\n");
+        break;
+    case Sunday:
+        printf("Sunday\n");
+        break;
+    default:
+        printf("Unknown Weekday\n");
+        break;
     }
 }
 
-void printWorld(int worldSizeX, int worldSizeY, char world[worldSizeX][worldSizeY]) {
-    for(int y = 0; y < worldSizeY; y++) {
-        for(int x = 0; x < worldSizeX; x++) {
-            printf("%c ", world[x][y]);
-        }
+struct Coordinate {
+    int X;
+    int Y;
+    int Z;
+};
 
-        printf("\n");
-    }
+struct Player {
+    int Lives;
+    struct Coordinate Position;
+};
+
+void printCoordinate(struct Coordinate coord) {
+    printf("{ x = %d, y = %d, z = %d }\n", coord.X, coord.Y, coord.Z);
+}
+
+int addIntegers(int integerA, int integerB) {
+    int result = integerA + integerB;
+
+    return result;
+}
+
+struct Coordinate addCoordinates(struct Coordinate coordA, struct Coordinate coordB) {
+    struct Coordinate result =  {
+        .X = coordA.X + coordB.X,
+        .Y = coordA.Y + coordB.Y,
+        .Z = coordA.Z + coordB.Z
+    };
+
+    return result;
+}
+
+void moveUp(struct Player* player) {
+    //(*player).Position.Y++;
+    player->Position.Y++;
+}
+
+void increment(int* i) {
+    (*i)++;
 }
 
 int main() {
-    int worldSizeX = 5;
-    int worldSizeY = 5;
+    struct Student myStudent = {
+        .Name = "Sepp",
+        .Gender = Male
+    };
 
-    char world[worldSizeX][worldSizeY];
+    int i = 123;
 
-    for(int y = 0; y < worldSizeY; y++) {
-        for(int x = 0; x < worldSizeX; x++) {
-            world[x][y] = ' ';
+    increment(&i);
+
+    // i = 124
+
+    struct Player myPlayer = {
+        .Lives = 5,
+        .Position = {
+            .X = 12,
+            .Y = 43,
+            .Z = 29
         }
-    }
+    };
 
-    world[2][1] = 'x';
-    world[0][1] = '~';
-    world[0][0] = '~';
-    world[0][2] = '~';
-    world[1][1] = '~';
-    world[3][2] = 'w';
-    world[4][2] = 'w';
-    world[4][3] = 'w';
-    world[4][4] = 'w';
+    printCoordinate(myPlayer.Position);
+    moveUp(&myPlayer);
+    printCoordinate(myPlayer.Position);
 
-    printWorld(worldSizeX, worldSizeY, world);
 
-    int myInt = 17;
-    printValue(myInt);
-    printReference(&myInt);
+    struct Coordinate myCoordinate = {
+        .X = 12,
+        .Y = 43,
+        .Z = 4
+    };
 
-    int arrayElementCount;
-    printf("Enter the number of elements: ");
-    scanf("%d", &arrayElementCount);
+    printCoordinate(myCoordinate);
 
-    int myIntArray[arrayElementCount];
+    /*enum Month myMonth = Monday;
 
-    for(int i = 0; i < arrayElementCount; i++) {
-        printf("Enter the value of element '%d': ", i + 1);
-        scanf("%d", &myIntArray[i]);
-    }
+    if(myMonth == February) {
+        printf("Hi!\n");
+    } else {
+        printf("Bye!\n");
+    }*/
 
-    printArray(myIntArray, arrayElementCount);
+    printWeekday(Wednesday);
+
+    printf("%d\n", Monday);
+    printf("%d\n", Tuesday);
+    printf("%d\n", Wednesday);
+    printf("%d\n", Thursday);
+    printf("%d\n", Friday);
+    printf("%d\n", Saturday);
+    printf("%d\n", Sunday);
 
     return 0;
 }
