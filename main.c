@@ -1,33 +1,87 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-struct Something {
-    int age;
-    char name[7];
-    double xy;
+struct node {
+    int value;
+    struct node* next;
 };
+
+void printNode(struct node* node) {
+    //printf("value: %d\n", node->value);
+    //printf("next:  %d\n", node->next);
+
+    printf("%d -> ", node->value);
+}
+
+struct node* initializeNode(int value) {
+    struct node* newNode = malloc(sizeof(struct node));
+    printf("Node initialized (%d)\n", value);
+
+    newNode->value = value;
+    newNode->next = NULL;
+
+    return newNode;
+};
+
+void freeNode(struct node* node) {
+    int value = node->value;
+    free(node);
+    printf("Node freed (%d)\n", value);
+}
+
+void printList(struct node* head) {
+    struct node* current = head;
+
+    while(current != NULL) {
+        printNode(current);
+        current = current->next;
+    }
+
+    printf("NULL\n");
+}
+
+void freeList(struct node* head) {
+    struct node* current = head;
+
+    while(current != NULL) {
+        struct node* next = current->next;
+        freeNode(current);
+        current = next;
+    }
+}
+
+void printListRecursive(struct node* head) {
+    if(head == NULL) {
+        printf("NULL\n");
+        return;
+    }
+
+    printNode(head);
+    printListRecursive(head->next);
+}
+
+void freeListRecursive(struct node* head) {
+    if(head == NULL) {
+        return;
+    }
+
+    struct node* next = head->next;
+    freeNode(head);
+
+    freeListRecursive(next);
+}
 
 int main()
 {
-    while(1) {
-        int* i = malloc(500);
-        printf("allocated...\n");
-        free(i);
-    }
+    struct node* head = NULL;
+    printListRecursive(head);
 
-    int i = 123;
-    int* heapI = malloc(10 * sizeof(int));
-    if(heapI == NULL) {
-        printf("Out of memory :(\n");
-        return 1;
-    }
+    head = initializeNode(7);
+    head->next = initializeNode(9);
+    freeList(head);
 
-    for(int x = 0; x < 10; x++) {
-        heapI[x] = x;
-    }
+    head = initializeNode(83);
 
-    for(int x = 0; x < 10; x++) {
-        printf("heapI = %d\n", heapI[x]);
-    }
+    printList(head);
+    freeListRecursive(head);
 }
