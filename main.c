@@ -2,102 +2,32 @@
 #include <stdlib.h>
 #include <string.h>
 
-int add(int a, int b) {
-    return a + b;
-}
-
-int subtract(int a, int b) {
-    return a - b;
-}
-
-int multiply(int a, int b) {
-    return a * b;
-}
-
-int divide(int a, int b) {
-    return a / b;
-}
-
-enum Gender {
-    Female,
-    Male,
-    Diverse
+struct Something {
+    int age;
+    char name[7];
+    double xy;
 };
-
-enum Grade {
-    Ungraded,
-    Excellent,
-    Good,
-    Ok,
-    Poor,
-    Failed
-};
-
-struct Lecture {
-    char       Name[33]; // 32 + \0
-    enum Grade Grade;
-};
-
-struct Student {
-    char           Name[33]; // 32 + \0
-    struct Lecture Lectures[10];
-    int            NumberOfLectures;
-    enum Gender    Gender;
-};
-
-void addLectureToStudent(struct Student* student,
-                         char* lectureName,
-                         enum Grade grade) {
-    if(student->NumberOfLectures >= 10) {
-        printf("The student has reached their maximum number of lectures!\n");
-        return;
-    }
-
-    struct Lecture newLecture = {
-        .Grade = grade
-    };
-    strcpy(newLecture.Name, lectureName);
-
-    student->Lectures[student->NumberOfLectures] = newLecture;
-    student->NumberOfLectures++;
-}
 
 int main()
 {
-    struct Student myStudent = {
-        .Name = "Sepp",
-        .Gender = Male,
-        .NumberOfLectures = 1,
-        .Lectures = {
-            {
-                .Name = "Prozedurale Sprachen",
-                .Grade = Excellent
-            }
-        }
-    };
+    while(1) {
+        int* i = malloc(500);
+        printf("allocated...\n");
+        free(i);
+    }
 
-    addLectureToStudent(&myStudent,
-                        "Grundlagen der Informatik",
-                        Poor);
+    int i = 123;
+    int* heapI = malloc(10 * sizeof(int));
+    if(heapI == NULL) {
+        printf("Out of memory :(\n");
+        return 1;
+    }
 
-    return 0;
+    for(int x = 0; x < 10; x++) {
+        heapI[x] = x;
+    }
 
-    /*
-    int valueA, valueB;
-    int option;
-    int (*operations[])(int, int) = { &add, &subtract, &multiply, &divide };
-
-    printf("Enter value a: ");
-    scanf("%d", &valueA);
-
-    printf("Enter value b: ");
-    scanf("%d", &valueB);
-
-    printf("Enter your option (0 = Add, 1 = Subtract, 2 = Multiply, 3 = Divide): ");
-    scanf("%d", &option);
-
-    int result = (*operations[option])(valueA, valueB);
-    printf("Result: %d\n", result);
-    return 0;
-    */
+    for(int x = 0; x < 10; x++) {
+        printf("heapI = %d\n", heapI[x]);
+    }
 }
