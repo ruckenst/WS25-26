@@ -122,72 +122,75 @@ void insertSorted(struct node** head, struct node* newNode) {
 }
 
 void removeAt(struct node** head, int index) {
-    // Check for empty list
     if(*head == NULL) {
-        printf("List is empty!\n");
+        printf("Error! The list is empty!\n");
         return;
     }
 
-    // Check if the first element needs to be removed
-    if(index == 0) {
-        struct node* nodeToRemove = *head;
-        *head = (*head)->next;
+    if(index < 0) {
+        printf("Error! Index cannot be negative!\n");
+        return;
+    }
 
-        freeNode(nodeToRemove);
+    struct node* current = *head;
+    if(index == 0) {
+        *head = current->next;
+        freeNode(current);
         return;
     }
 
     int currentIndex = 0;
     struct node* previous = NULL;
-    struct node* current = *head;
-
-    // Go to the last valid element or until the index is hit
     while(current->next != NULL && currentIndex < index) {
         previous = current;
         current = current->next;
-
         currentIndex++;
     }
 
-    // Check if the index was hit
     if(currentIndex != index) {
-        printf("Index was out of bounds!\n");
+        printf("Error! Index '%d' is out of bounds! (max index: '%d')\n", index, currentIndex);
         return;
     }
 
-    struct node* nodeToRemove = current;
     previous->next = current->next;
-    freeNode(nodeToRemove);
+    freeNode(current);
 }
 
 int main()
 {
     struct node* head = NULL;
-    removeAt(&head, 0);
-    printListRecursive(head);
+    printList(head); // NULL
 
-    insertSorted(&head, initializeNode(7));
-    insertSorted(&head, initializeNode(3));
-    insertSorted(&head, initializeNode(5));
+    removeAt(&head, 0); // ERROR!
 
-    removeAt(&head, 0);
+    insertBack(&head, initializeNode(7));
+    insertBack(&head, initializeNode(4));
+    insertBack(&head, initializeNode(5));
+    insertBack(&head, initializeNode(6));
+    printList(head); // 7 -> 4 -> 5 -> -> 6 NULL
 
-    printListRecursive(head);
+    removeAt(&head, -12); // ERROR!
+    removeAt(&head, 73); // ERROR!
+    removeAt(&head, 0); // REMOVE 7 (4 -> 5 -> 6)
+    removeAt(&head, 1); // REMOVE 5 (4 -> 6)
+    removeAt(&head, 1); // REMOVE 6 (4)
+    removeAt(&head, 0); // REMOVE 4
+    printList(head); // NULL
 
     return 0;
 
-    for(int i = 0; i < 10; i++) {
-        insertBack(&head, initializeNode(i));
+    while(1) {
+        int input;
+        printf("Enter your number: ");
+        scanf("%d", &input);
+
+        insertBack(&head, initializeNode(input));
+        if(!(input % 2)) {
+            removeAt(&head, 0);
+        }
+
+        printList(head);
     }
-
-    printList(head);
-
-    for(int i = 0; i < 10; i++) {
-        insertFront(&head, initializeNode(i));
-    }
-
-    printList(head);
-    freeList(head);
 
     return 0;
 }
