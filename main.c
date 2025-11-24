@@ -122,17 +122,99 @@ void addSorted(struct node** head, struct node* newNode) {
     newNode->next = current;
 }
 
+void removeAt(struct node** head, int index) {
+    if(*head == NULL) {
+        printf("Error! List is empty.\n");
+        return;
+    }
+
+    if(index < 0) {
+        printf("Error! Index cannot be negative.\n");
+        return;
+    }
+
+    struct node* current = *head;
+
+    if(index == 0) {
+        *head = (*head)->next;
+        freeNode(current);
+        return;
+    }
+
+    int currentIndex = 0;
+    struct node* previous = NULL;
+
+    while(current->next != NULL && currentIndex < index) {
+        previous = current;
+        current = current->next;
+        currentIndex++;
+    }
+
+    if(currentIndex != index) {
+        printf("Error! Index '%d' is out of bounds (max index = '%d')\n", index, currentIndex);
+        return;
+    }
+
+    previous->next = current->next;
+    freeNode(current);
+}
+
+int isEmpty(struct node* head) {
+    return head == NULL;
+}
+
 int main()
 {
     struct node* head = NULL;
+
+    while(1) {
+        int input;
+        printf("Enter your value to be inserted: ");
+        scanf("%d", &input);
+
+        addBack(&head, createNode(input));
+
+        if(!(input % 2)) {
+            removeAt(&head, 0);
+        }
+
+        printList(head);
+    }
+
+
+    return 0;
+
+    //struct node* head = NULL;
+    printList(head); // NULL
+
+    removeAt(&head, 0); // Error!
+    printList(head); // NULL
+
+    addSorted(&head, createNode(1));
+    addSorted(&head, createNode(7));
+    addSorted(&head, createNode(4));
+    addSorted(&head, createNode(6));
+
+    printList(head); // 1 -> 4 -> 6 -> 7 -> NULL
+
+    removeAt(&head, 74); // Error!
+    removeAt(&head, -35); // Error!
+    removeAt(&head, 0); // 1 removed (4 -> 6 -> 7)
+    removeAt(&head, 1); // 6 removed (4 -> 7)
+    removeAt(&head, 1); // 7 removed (4)
+    removeAt(&head, 0); // 4 removed (NULL)
+
+    printList(head); // NULL
+
+    return 0;
+
+    //struct node* head = NULL;
 
     addSorted(&head, createNode(7));
     addSorted(&head, createNode(3));
     addSorted(&head, createNode(5));
 
     printList(head);
-
-    return 0;
 
     for(int i = 0; i < 10; i++) {
         addBack(&head, createNode(i));
@@ -147,12 +229,9 @@ int main()
     printList(head);
     freeList(head);
 
-    return 0;
-
     head = createNode(123);
 
     printList(head);
-    printListRecursive(head);
 
     freeList(head);
 
