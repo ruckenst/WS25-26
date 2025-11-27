@@ -1,239 +1,59 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-struct node {
-    int value;
-    struct node* next;
+struct employee {
+    char firstname[33];
+    char lastname[33];
+    int id;
 };
-
-struct node* createNode(int value) {
-    struct node* newNode = malloc(sizeof(struct node));
-    #ifdef DEBUG_PRINT
-    printf("Node Created (%d)\n", value);
-    #endif
-
-    newNode->value = value;
-    newNode->next = NULL;
-
-    return newNode;
-};
-
-void freeNode(struct node* node) {
-    int value = node->value;
-
-    free(node);
-    #ifdef DEBUG_PRINT
-    printf("Node Freed (%d)\n", value);
-    #endif
-}
-
-void printNode(struct node* node) {
-    printf("%d -> ", node->value);
-}
-
-void freeList(struct node* head) {
-    struct node* current = head;
-
-    while(current != NULL) {
-        struct node* next = current->next;
-        freeNode(current);
-
-        current = next;
-    }
-}
-
-void freeListRecursive(struct node* head) {
-    if(head == NULL) {
-        return;
-    }
-
-    struct node* next = head->next;
-    freeNode(head);
-
-    freeListRecursive(next);
-}
-
-void printList(struct node* head) {
-    struct node* current = head;
-
-    while(current != NULL) {
-        printNode(current);
-        current = current->next;
-    }
-
-    printf("NULL\n");
-}
-
-void printListRecursive(struct node* head) {
-    if(head == NULL) {
-        printf("NULL\n");
-        return;
-    }
-
-    printNode(head);
-    printListRecursive(head->next);
-}
-
-void addBack(struct node** head, struct node* newNode){
-    // Check if list is empty
-    if(*head == NULL) {
-        *head = newNode;
-        return;
-    }
-
-    // Get last valid element
-    struct node* current = *head;
-    while(current->next != NULL) {
-        current = current->next;
-    }
-
-    current->next = newNode;
-}
-
-void addFront(struct node** head, struct node* newNode) {
-    newNode->next = *head;
-    *head = newNode;
-}
-
-void addSorted(struct node** head, struct node* newNode) {
-    // Check if list is empty
-    if(*head == NULL) {
-        *head = newNode;
-        return;
-    }
-
-    struct node* previous = NULL;
-    struct node* current = *head;
-
-    // Go over each element, until you reach one with a higher value
-    while(current != NULL &&
-          newNode->value > current->value) {
-        previous = current;
-        current = current->next;
-    }
-
-    // Check if the element needs to be inserted in the beginning
-    if(previous == NULL) {
-        addFront(head, newNode);
-        return;
-    }
-
-    previous->next = newNode;
-    newNode->next = current;
-}
-
-void removeAt(struct node** head, int index) {
-    if(*head == NULL) {
-        printf("Error! List is empty.\n");
-        return;
-    }
-
-    if(index < 0) {
-        printf("Error! Index cannot be negative.\n");
-        return;
-    }
-
-    struct node* current = *head;
-
-    if(index == 0) {
-        *head = (*head)->next;
-        freeNode(current);
-        return;
-    }
-
-    int currentIndex = 0;
-    struct node* previous = NULL;
-
-    while(current->next != NULL && currentIndex < index) {
-        previous = current;
-        current = current->next;
-        currentIndex++;
-    }
-
-    if(currentIndex != index) {
-        printf("Error! Index '%d' is out of bounds (max index = '%d')\n", index, currentIndex);
-        return;
-    }
-
-    previous->next = current->next;
-    freeNode(current);
-}
-
-int isEmpty(struct node* head) {
-    return head == NULL;
-}
 
 int main()
 {
-    struct node* head = NULL;
-
-    while(1) {
-        int input;
-        printf("Enter your value to be inserted: ");
-        scanf("%d", &input);
-
-        addBack(&head, createNode(input));
-
-        if(!(input % 2)) {
-            removeAt(&head, 0);
-        }
-
-        printList(head);
+    struct employee* employees[10];
+    for(int i = 0; i < 10; i++) {
+        employees[i] = malloc(sizeof(struct employee));
+        strcpy(employees[i]->firstname, "Test A");
+        strcpy(employees[i]->lastname, "Test B");
+        employees[i]->id = i + 1;
     }
 
-
-    return 0;
-
-    //struct node* head = NULL;
-    printList(head); // NULL
-
-    removeAt(&head, 0); // Error!
-    printList(head); // NULL
-
-    addSorted(&head, createNode(1));
-    addSorted(&head, createNode(7));
-    addSorted(&head, createNode(4));
-    addSorted(&head, createNode(6));
-
-    printList(head); // 1 -> 4 -> 6 -> 7 -> NULL
-
-    removeAt(&head, 74); // Error!
-    removeAt(&head, -35); // Error!
-    removeAt(&head, 0); // 1 removed (4 -> 6 -> 7)
-    removeAt(&head, 1); // 6 removed (4 -> 7)
-    removeAt(&head, 1); // 7 removed (4)
-    removeAt(&head, 0); // 4 removed (NULL)
-
-    printList(head); // NULL
-
-    return 0;
-
-    //struct node* head = NULL;
-
-    addSorted(&head, createNode(7));
-    addSorted(&head, createNode(3));
-    addSorted(&head, createNode(5));
-
-    printList(head);
+    FILE* newFile = fopen("./files/Export.csv", "w");
+    if(newFile == NULL) {
+        printf("The file could not be opened!\n");
+        return 1;
+    }
 
     for(int i = 0; i < 10; i++) {
-        addBack(&head, createNode(i));
+        fprintf(newFile, "%s,%s,%d\n",
+                employees[i]->firstname,
+                employees[i]->lastname,
+                employees[i]->id);
     }
 
-    printList(head);
+    while(1){}
+
+    fclose(newFile);
 
     for(int i = 0; i < 10; i++) {
-        addFront(&head, createNode(i));
+        free(employees[i]);
     }
 
-    printList(head);
-    freeList(head);
 
-    head = createNode(123);
+    FILE* file = fopen("./files/Test.csv", "r");
+    if(file == NULL) {
+        printf("The file could not be opened!\n");
+        return 1;
+    }
 
-    printList(head);
+    char line[65];
+    while(fscanf(file, "%s64", &line) != EOF) {
+        printf("line: %s\n", line);
 
-    freeList(head);
+        // CONVERT TO STRUCT
+    }
+
+    fclose(file);
 
     return 0;
 }
