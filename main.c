@@ -2,58 +2,68 @@
 #include <stdlib.h>
 #include <string.h>
 
-struct employee {
-    char firstname[33];
-    char lastname[33];
-    int id;
-};
+#define ARRAY_SIZE 100
+
+void fillArray(int myArr[], int size) {
+    for(int i = 0; i < size; i++) {
+        myArr[i] = size - i;
+    }
+}
+
+void bubbleSortVisualgo(int myArr[], int size) {
+    int swapped = 0;
+    int sortedCount = 0;
+
+    do {
+        swapped = 0;
+        for(int i = 0; i < size - sortedCount - 1; i++) {
+            int temp = myArr[i];
+            myArr[i] = myArr[i + 1];
+            myArr[i + 1] = temp;
+
+            swapped = 1;
+        }
+
+        sortedCount++;
+    } while(swapped);
+}
+
+void bubbleSortArray(int myArr[], int size) {
+    for(int i = 0; i < size - 1; i++) {
+        for(int j = 0; j < size /*- i*/ - 1; j++) {
+            if(myArr[j] > myArr[j + 1]) {
+                int temp = myArr[j];
+                myArr[j] = myArr[j + 1];
+                myArr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+void printArray(int myArr[], int size) {
+    printf("[");
+    for(int i = 0; i < size; i++) {
+        printf("%d", myArr[i]);
+
+        if(i < size - 1) {
+            printf(", ");
+        }
+    }
+
+    printf("]\n");
+}
 
 int main()
 {
-    struct employee* employees[10];
-    for(int i = 0; i < 10; i++) {
-        employees[i] = malloc(sizeof(struct employee));
-        strcpy(employees[i]->firstname, "Test A");
-        strcpy(employees[i]->lastname, "Test B");
-        employees[i]->id = i + 1;
-    }
+    int myArr[ARRAY_SIZE];
 
-    FILE* newFile = fopen("./files/Export.csv", "w");
-    if(newFile == NULL) {
-        printf("The file could not be opened!\n");
-        return 1;
-    }
+    fillArray(myArr, ARRAY_SIZE);
 
-    for(int i = 0; i < 10; i++) {
-        fprintf(newFile, "%s,%s,%d\n",
-                employees[i]->firstname,
-                employees[i]->lastname,
-                employees[i]->id);
-    }
+    printArray(myArr, ARRAY_SIZE);
 
-    while(1){}
+    bubbleSortArray(myArr, ARRAY_SIZE);
 
-    fclose(newFile);
-
-    for(int i = 0; i < 10; i++) {
-        free(employees[i]);
-    }
-
-
-    FILE* file = fopen("./files/Test.csv", "r");
-    if(file == NULL) {
-        printf("The file could not be opened!\n");
-        return 1;
-    }
-
-    char line[65];
-    while(fscanf(file, "%s64", &line) != EOF) {
-        printf("line: %s\n", line);
-
-        // CONVERT TO STRUCT
-    }
-
-    fclose(file);
+    printArray(myArr, ARRAY_SIZE);
 
     return 0;
 }
