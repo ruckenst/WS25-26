@@ -1,73 +1,101 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define ARRAY_SIZE 100
-#define MAX_VALUE 50
+struct node {
+    int value;
+    struct node* next;
+};
 
-void printArray(int arr[], int size) {
-    printf("[");
-    for(int i = 0; i < size; i++) {
-        printf("%d", arr[i]);
+struct node* createNode(int value) {
+    struct node* newNode = malloc(sizeof(struct node));
+    newNode->value = value;
+    newNode->next = NULL;
 
-        if(i < size - 1) {
-            printf(", ");
-        }
-    }
-    printf("]\n");
+    return newNode;
+};
+
+void insertFront(struct node** head, struct node* newNode) {
+   newNode->next = *head;
+   *head = newNode;
 }
 
-void initializeArray(int arr[], int size) {
-    for(int i = 0; i < size; i++) {
-        int factor = i * (i + size);
-        int primedFactor = factor % 19 * (i + 13);
-        int shiftedFactor = primedFactor  >> 3;
+void printList(struct node* head) {
+    struct node* current = head;
 
-        arr[i] = shiftedFactor % MAX_VALUE;
+    while(current != NULL) {
+        printf("%d -> ", current->value);
+        current = current->next;
     }
+
+    printf("NULL\n");
 }
 
-void bubbleSortArray(int arr[], int count) {
-    for(int i = 0; i < count - 1; i++) {
-        for(int j = 0; j < count /*- i*/ - 1; j++) {
-            if(arr[j] > arr[j + 1]) {
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
+void freeList(struct node** head) {
+    struct node* current = *head;
+
+    while(current != NULL) {
+        struct node* next = current->next;
+        free(current);
+        current = next;
     }
+
+    *head = NULL; // Etwas sauberer, da kein Dangling Pointer
 }
 
-void bubbleSortArrayVisualgo(int arr[], int count) {
+void swapNodeValues(struct node* nodeA, struct node* nodeB) {
+    int temp = nodeA->value;
+    nodeA->value = nodeB->value;
+    nodeB->value = temp;
+}
+
+void bubbleSort(struct node* head){
+    if(head == NULL) {
+        return;
+    }
+
     int swapped = 0;
-    int sortedCount = 0;
+    struct node* firstSorted = NULL;
 
     do {
         swapped = 0;
-        for(int i = 0; i < count - sortedCount - 1; i++) {
-            if(arr[i] > arr[i + 1]) {
-                int temp = arr[i];
-                arr[i] = arr[i + 1];
-                arr[i + 1] = temp;
 
+        struct node* current = head;
+        struct node* next = current->next;
+
+        while(next != firstSorted) {
+            if(current->value > next->value) {
+                swapNodeValues(current, next);
                 swapped = 1;
             }
+
+            current = current->next;
+            next = next->next;
         }
 
-        sortedCount++;
+        firstSorted = current;
     }while(swapped);
 }
 
 int main()
 {
-    int arr[ARRAY_SIZE];
-    initializeArray(arr, ARRAY_SIZE);
-    printArray(arr, ARRAY_SIZE);
+    struct node* head = NULL;
 
-    bubbleSortArray(arr, ARRAY_SIZE);
-    //bubbleSortArrayVisualgo(arr, ARRAY_SIZE);
+    insertFront(&head, createNode(4));
+    insertFront(&head, createNode(2));
+    insertFront(&head, createNode(6));
+    insertFront(&head, createNode(3));
+    insertFront(&head, createNode(5));
+    insertFront(&head, createNode(3));
 
-    printArray(arr, ARRAY_SIZE);
+    printList(head);
+
+    swapNodeValues(head, head->next->next->next);
+    printList(head);
+
+    bubbleSort(head);
+    printList(head);
+
+    freeList(&head);
 
     return 0;
 }
